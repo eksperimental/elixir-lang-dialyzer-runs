@@ -47,12 +47,12 @@ jobs:
         uses: actions/checkout@v2
         with:
           repository: ${{ github.event.inputs.repository || 'elixir-lang/elixir' }}
-          ref: ${{ github.event.inputs.ref || 'main' }}
-          path: elixir
+          ref: ${{ github.event.inputs.ref || env.STABLE_BRANCH }}
+          path: elixir_stable
 
       - name: Compile elixir
         run: |
-          cd elixir
+          cd elixir_stable
           make compile
           cd ../
 
@@ -63,7 +63,7 @@ jobs:
           key: v2-OTP-${{ matrix.otp_release }}
 
       - name: Check Elixir
-        run: elixir/bin/elixir dialyzer.exs
+        run: elixir_stable/bin/elixir dialyzer.exs
 
       - name: Save the report
         if: ${{ always() }}

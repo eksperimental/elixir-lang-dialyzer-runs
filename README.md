@@ -22,13 +22,14 @@ Occasionally, filtering code will have to be updated when line numbers change.
 # clone the repositories:
 git clone git@github.com:eksperimental/elixir-lang-dialyzer-runs.git
 cd elixir-lang-dialyzer-runs
-git clone git@github.com:elixir-lang/elixir.git --depth=1
+STABLE_BRANCH=$(curl https://api.github.com/repos/elixir-lang/elixir/releases/latest | jq --raw-output '.tag_name' | grep -Po '(v\d+\.\d+)')
+git clone --branch ${STABLE_BRANCH} --depth=1 https://github.com/elixir-lang/elixir.git elixir_stable
 
 # build elixir:
-cd elixir
+cd elixir_stable
 make clean compile
 cd ../
 
 # prepare the base Erlang PLT and run analysis on Elixir source code:
-elixir/bin/elixir dialyzer.exs
+elixir_stable/bin/elixir dialyzer.exs
 ```
