@@ -55,6 +55,7 @@ jobs:
           cd elixir_stable
           make compile
           cd ../
+          ln -s elixir_stable elixir
 
       - name: Handle otp PLT file caching
         uses: actions/cache@v2
