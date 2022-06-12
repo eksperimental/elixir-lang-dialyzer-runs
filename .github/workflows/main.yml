@@ -1,10 +1,15 @@
+---
+
 name: dialyzer
+
+env:
+  STABLE_BRANCH: $(curl https://api.github.com/repos/elixir-lang/elixir/releases/latest | jq --raw-output '.tag_name' | grep -Po '(v\d+\.\d+)')
 
 on:
   push:
-    branches: [master]
+    branches: [$STABLE_BRANCH]
   pull_request:
-    branches: [master]
+    branches: [$STABLE_BRANCH]
   schedule:
     - cron: "0 0 * * *"
   workflow_dispatch:
@@ -12,7 +17,7 @@ on:
       repository:
         description: "elixir source repo to check out"
         required: false
-        default: "michallepicki/elixir"
+        default: "eksperimental/elixir"
       ref:
         description: "elixir source ref to check out"
         required: false
@@ -22,7 +27,7 @@ jobs:
   dialyzer:
     strategy:
       matrix:
-          otp_release: ['23.3.4.14', '24.3.4.1', '25.0.1']
+        otp_release: ['22.3.4.26', '23.3.4.14', '24.3.4.1', '25.0.1']
       fail-fast: false
     runs-on: ubuntu-20.04
     steps:
