@@ -2,9 +2,6 @@
 
 name: dialyzer
 
-env:
-  STABLE_BRANCH: $(curl https://api.github.com/repos/elixir-lang/elixir/releases/latest | jq --raw-output '.tag_name' | grep -Po '(v\d+\.\d+)')
-
 on:
   push:
     branches: [stable]
@@ -33,6 +30,12 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v2
+
+      - name: Set env
+        run: |
+          STABLE_BRANCH=$(curl https://api.github.com/repos/elixir-lang/elixir/releases/latest | jq --raw-output '.tag_name' | grep -Po '(v\d+\.\d+)')
+          echo $STABLE_BRANCH
+          echo "STABLE_BRANCH=${STABLE_BRANCH}" >> $GITHUB_ENV
 
       - name: Install erlang
         run: |
